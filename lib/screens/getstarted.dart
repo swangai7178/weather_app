@@ -6,7 +6,7 @@ import 'package:weather_app/screens/home.dart';
 
 
 class GetStarted extends StatelessWidget {
-  const GetStarted({Key? key}) : super(key: key);
+  const GetStarted({super.key});
 
   @override
   Widget build(BuildContext context) {

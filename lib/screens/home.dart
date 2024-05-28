@@ -11,7 +11,7 @@ import 'package:weather_app/screens/detailpage.dart';
 import 'package:weather_app/screens/widget/weather_item.dart';
 
 class Home extends StatefulWidget {
-  const Home({Key? key}) : super(key: key);
+  const Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
@@ -116,7 +116,7 @@ class _HomeState extends State<Home> {
         listenWhen: (previous, current) => current is ActionCurrentWeatherState,
         buildWhen: (previous, current) => current is! ActionCurrentWeatherState,
         listener: (context, state) {
-          // TODO: implement listener
+         
         },
         builder: (context, state) {
           switch (state.runtimeType) {
@@ -261,27 +261,20 @@ class _HomeState extends State<Home> {
         ],
       ),
     ),
-    Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+    const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const Text(
+          Text(
             'Today',
             style: TextStyle(
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),
           ),
-          Text(
-            'Next 7 Days',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 18,
-              color: myConstants.primaryColor,
-            ),
-          ),
+          
         ],
       ),
     ),
@@ -292,7 +285,7 @@ class _HomeState extends State<Home> {
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: BlocConsumer<ForecastBloc, ForecastState>(
         listener: (context, state) {
-          // TODO: implement listener
+         
         },
         bloc: forecastBloc,
         listenWhen: (previous, current) =>
@@ -401,11 +394,29 @@ class _HomeState extends State<Home> {
       ),
     ),
 
+    const Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text(
+            'Weekly ForeCast',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+          
+        ],
+      ),
+    ),
+
     Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: BlocConsumer<DaysForecastBloc, DaysForecastState>(
         listener: (context, state) {
-          // TODO: implement listener
+          
         },
         bloc: daysForecastBloc,
         listenWhen: (previous, current) =>
@@ -463,7 +474,7 @@ class _HomeState extends State<Home> {
                     ],
                   ),
                   child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    
                     children: [
                       Text(
                         forecastDay.day.avgtempC.round().toString() + "°C",
@@ -473,6 +484,7 @@ class _HomeState extends State<Home> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
+                      const SizedBox(width: 50,),
                       Image.asset(
                         'assets/heavycloud.png',
                         width: 30,
@@ -500,6 +512,7 @@ class _HomeState extends State<Home> {
                               ),
                             ],
                           ),
+                          const SizedBox(width: 40,),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [

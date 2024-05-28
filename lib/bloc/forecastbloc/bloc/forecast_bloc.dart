@@ -23,7 +23,7 @@ class ForecastBloc extends Bloc<ForecastEvent, ForecastState> {
       emit(ForeCastingSuccessState(foreCast:currentforecastWeather ));
 
     } catch (e) {
-      print(e); 
+      emit(ForeCastingErrorState(error: e.toString()));
     }
 
   }

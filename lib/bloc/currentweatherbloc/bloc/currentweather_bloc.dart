@@ -17,7 +17,7 @@ class CurrentweatherBloc extends Bloc<CurrentweatherEvent, CurrentweatherState> 
     emit(CurrentWeatherLoadingState());
     try {
     var data = await WeatherService.getweathercurrent(event.city); 
-     print(data);
+     
 
     var currentWeather = CurrentWeather.fromJson(data);
 
