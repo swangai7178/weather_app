@@ -71,7 +71,7 @@ class _HomeState extends State<Home> {
               ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: Image.asset(
-                  'assets/profile.png',
+                  'assets/lightrain.png',
                   width: 40,
                   height: 40,
                 ),
@@ -255,7 +255,7 @@ class _HomeState extends State<Home> {
           weatherItem(
             text: 'UV',
             value: currentsuccess.current.current.uv.toInt(),
-            unit: 'C',
+            unit: '',
             imageUrl: 'assets/max-temp.png',
           ),
         ],
