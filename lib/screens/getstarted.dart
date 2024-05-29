@@ -58,7 +58,7 @@ class _GetStartedScreenState extends State<GetStartedScreen> with SingleTickerPr
             children: [
               FadeTransition(
                 opacity: _fadeInAnimation!,
-                child: Image.asset('assets/get-started.png', height: 200, width: 200),
+                child: Image.asset('assets/showers.png', height: 200, width: 200),
               ),
               const SizedBox(height: 30),
               GestureDetector(

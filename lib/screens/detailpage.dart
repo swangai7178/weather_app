@@ -22,11 +22,15 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   String imageUrl = '';
 
-  bool _isExpanded = false;
+    int? _expandedIndex;
 
-  void _toggleExpand() {
+  void _toggleExpand(int index) {
     setState(() {
-      _isExpanded = !_isExpanded;
+      if (_expandedIndex == index) {
+        _expandedIndex = null;
+      } else {
+        _expandedIndex = index;
+      }
     });
   }
 
@@ -54,106 +58,107 @@ class _DetailPageState extends State<DetailPage> {
           
         ],
       ),
-      body: ListView.builder(
-      itemCount: widget.consolidatedWeatherList.hour.length,
-      scrollDirection: Axis.horizontal,
-      itemBuilder: (BuildContext context, int index) {
-        var weather = widget.consolidatedWeatherList.hour[index];
-        var parsedDate = DateTime.parse(weather.time);
-        var formattedTime = DateFormat('h a').format(parsedDate);
-        var dayOfWeek = DateFormat('EEEE').format(parsedDate).substring(0, 3);
-        var temperature = "${weather.tempC}°C";
+      body:  ListView.builder(
+        itemCount: widget.consolidatedWeatherList.hour.length,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (BuildContext context, int index) {
+          var weather = widget.consolidatedWeatherList.hour[index];
+          var parsedDate = DateTime.parse(weather.time);
+          var formattedTime = DateFormat('h a').format(parsedDate);
+          var dayOfWeek = DateFormat('EEEE').format(parsedDate).substring(0, 3);
+          var temperature = "${weather.tempC}°C";
+          bool isExpanded = _expandedIndex == index;
 
-        return GestureDetector(
-      onTap: _toggleExpand,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          width: _isExpanded ? 200 : 100, // Adjust width when expanded
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: _isExpanded
-                  ? [Colors.white, Colors.white]
-                  : [const Color(0xff9ebcf9), const Color(0xff5e88f7)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
+          return GestureDetector(
+            onTap: () => _toggleExpand(index),
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                width: isExpanded ? 200 : 100, // Adjust width when expanded
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: isExpanded
+                        ? [Colors.white, Colors.white]
+                        : [const Color(0xff9ebcf9), const Color(0xff5e88f7)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  borderRadius: const BorderRadius.all(Radius.circular(10)),
+                  boxShadow: [
+                    BoxShadow(
+                      offset: const Offset(0, 1),
+                      blurRadius: 5,
+                      color: Colors.blue.withOpacity(0.3),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    if (isExpanded)
+                      Text(
+                        "Time: $formattedTime",
+                        style: const TextStyle(
+                          fontSize: 24,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    Text(
+                      "Temp: $temperature",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: isExpanded ? Colors.blue : Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Image.asset(
+                      getWeatherIcon(weather.condition.text),
+                      width: 40,
+                    ),
+                    Text(
+                      "Day: $dayOfWeek",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: isExpanded ? Colors.blue : Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    Text(
+                      "Time: $formattedTime",
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: isExpanded ? Colors.blue : Colors.white,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    if (isExpanded) ...[
+                      Text(
+                        "Humidity: ${widget.consolidatedWeatherList.hour[index].humidity}%",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        "Wind: ${widget.consolidatedWeatherList.hour[index].windKph} km/h",
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.blue,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
             ),
-            borderRadius: const BorderRadius.all(Radius.circular(10)),
-            boxShadow: [
-              BoxShadow(
-                offset: const Offset(0, 1),
-                blurRadius: 5,
-                color: Colors.blue.withOpacity(0.3),
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              if (_isExpanded)
-                Text(
-                 formattedTime,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              Text(
-                temperature,
-                style: TextStyle(
-                  fontSize: 20,
-                  color: _isExpanded ? Colors.blue : Colors.white,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Image.asset(
-                getWeatherIcon(weather.condition.text),
-                width: 40,
-              ),
-              Text(
-                dayOfWeek,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: _isExpanded ? Colors.blue : Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                formattedTime,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: _isExpanded ? Colors.blue : Colors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              if (_isExpanded) ...[
-                Text(
-                  "${widget.consolidatedWeatherList.hour[index].humidity}%",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Text(
-                  "${widget.consolidatedWeatherList.hour[index].windKph} km/h",
-                  style: const TextStyle(
-                    fontSize: 14,
-                    color: Colors.blue,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ],
-          ),
-        ),
+          );
+        },
       ),
-    );
-      },
-    )
     );
   }
 
