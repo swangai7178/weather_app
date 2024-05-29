@@ -13,7 +13,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Weather App',
-      home: GetStarted(),
+      home: GetStartedScreen(),
       debugShowCheckedModeBanner: false,
     );
   }
