@@ -22,6 +22,14 @@ class DetailPage extends StatefulWidget {
 class _DetailPageState extends State<DetailPage> {
   String imageUrl = '';
 
+  bool _isExpanded = false;
+
+  void _toggleExpand() {
+    setState(() {
+      _isExpanded = !_isExpanded;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     Constants myConstants = Constants();
@@ -31,7 +39,7 @@ class _DetailPageState extends State<DetailPage> {
       colors: <Color>[Color(0xffABCFF2), Color(0xff9AC6F3)],
     ).createShader(const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0));
 
-    int selectedIndex = widget.selectedId;
+   
      // Use dot notation
 
 
@@ -56,90 +64,94 @@ class _DetailPageState extends State<DetailPage> {
         var dayOfWeek = DateFormat('EEEE').format(parsedDate).substring(0, 3);
         var temperature = "${weather.tempC}°C";
 
-        return Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            padding: const EdgeInsets.all(16),
-            width: 100,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: index == selectedIndex
-                    ? [Colors.white, Colors.white]
-                    : [const Color(0xff9ebcf9), const Color(0xff5e88f7)],
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-              ),
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-              boxShadow: [
-                BoxShadow(
-                  offset: const Offset(0, 1),
-                  blurRadius: 5,
-                  color: Colors.blue.withOpacity(0.3),
-                ),
-              ],
+        return GestureDetector(
+      onTap: _toggleExpand,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          padding: const EdgeInsets.all(16),
+          width: _isExpanded ? 200 : 100, // Adjust width when expanded
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: _isExpanded
+                  ? [Colors.white, Colors.white]
+                  : [const Color(0xff9ebcf9), const Color(0xff5e88f7)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
             ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
+            borderRadius: const BorderRadius.all(Radius.circular(10)),
+            boxShadow: [
+              BoxShadow(
+                offset: const Offset(0, 1),
+                blurRadius: 5,
+                color: Colors.blue.withOpacity(0.3),
+              ),
+            ],
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              if (_isExpanded)
                 Text(
-                  temperature,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: index == selectedIndex
-                        ? Colors.blue
-                        : Colors.white,
+                 formattedTime,
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Colors.blue,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                Image.asset(
-                  getWeatherIcon(weather.condition.text),
-                  width: 40,
+              Text(
+                temperature,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: _isExpanded ? Colors.blue : Colors.white,
+                  fontWeight: FontWeight.bold,
                 ),
-                Text(
-                  dayOfWeek,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: index == selectedIndex
-                        ? Colors.blue
-                        : Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+              ),
+              Image.asset(
+                getWeatherIcon(weather.condition.text),
+                width: 40,
+              ),
+              Text(
+                dayOfWeek,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: _isExpanded ? Colors.blue : Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
-                Text(
-                  formattedTime,
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: index == selectedIndex
-                        ? Colors.blue
-                        : Colors.white,
-                    fontWeight: FontWeight.w500,
-                  ),
+              ),
+              Text(
+                formattedTime,
+                style: TextStyle(
+                  fontSize: 16,
+                  color: _isExpanded ? Colors.blue : Colors.white,
+                  fontWeight: FontWeight.w500,
                 ),
+              ),
+              if (_isExpanded) ...[
                 Text(
-                  "${weather.humidity}%",
-                  style: TextStyle(
+                  "${widget.consolidatedWeatherList.hour[index].humidity}%",
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: index == selectedIndex
-                        ? Colors.blue
-                        : Colors.white,
+                    color: Colors.blue,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 Text(
-                  "${weather.windKph} km/h",
-                  style: TextStyle(
+                  "${widget.consolidatedWeatherList.hour[index].windKph} km/h",
+                  style: const TextStyle(
                     fontSize: 14,
-                    color: index == selectedIndex
-                        ? Colors.blue
-                        : Colors.white,
+                    color: Colors.blue,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
-            ),
+            ],
           ),
-        );
+        ),
+      ),
+    );
       },
     )
     );
